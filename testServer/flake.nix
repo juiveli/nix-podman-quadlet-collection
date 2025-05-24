@@ -1,10 +1,10 @@
-# Nix-podman-testServer-quadlet
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
+
   outputs =
-    { nixpkgs, ... }@attrs:
+    { nixpkgs, home-manager, ... }@attrs:
     {
       homeManagerModules.quadlet =
         {
@@ -25,16 +25,16 @@
           config = lib.mkIf cfg.enable {
             systemd.user.startServices = "sd-switch";
 
-            virtualisation.quadlet.containers = {
-              testServer = {
-                autoStart = true;
-                serviceConfig = {
-                  RestartSec = "10";
+            services.podman.containers.testServer = {
+              autoStart = true;
+              extraConfig = {
+                Service = {
                   Restart = "always";
+                  RestartSec = "10";
                 };
-                containerConfig = {
-                  image = "quay.io/libpod/banner:latest";
-                  publishPorts = [ "8001:80" ];
+                Container = {
+                  Image = "quay.io/libpod/banner:latest";
+                  PublishPort = [ "8002:80" ];
                 };
               };
             };
