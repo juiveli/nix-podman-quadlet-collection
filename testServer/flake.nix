@@ -32,11 +32,9 @@
                   Restart = "always";
                   RestartSec = "10";
                 };
-                Container = {
-                  Image = "quay.io/libpod/banner:latest";
-                  PublishPort = [ "8002:80" ];
-                };
               };
+              image = "quay.io/libpod/banner:latest";
+              ports = [ "8001:80" ];
             };
           };
         };
